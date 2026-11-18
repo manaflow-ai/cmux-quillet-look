@@ -1,5 +1,7 @@
 # Quillet
 
+[![Get it on cmux](https://cmux.com/extensions/badge.svg)](https://cmux.com/extensions/manaflow-ai/cmux-quillet-look)
+
 cmux's own type family for the agent chat. Three faces that share one line box, set for 15 px
 prose at a 1.6 line height and code at the default 0.875 scale:
 
