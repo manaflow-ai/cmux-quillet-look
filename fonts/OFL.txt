@@ -1,11 +1,12 @@
 Copyright 2021 The Hanken Grotesk Project Authors (https://github.com/marcologous/hanken-grotesk)
 Copyright 2020 The Newsreader Project Authors (http://github.com/productiontype/Newsreader)
 Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)
-Copyright 2026 Manaflow (the modifications that make Quillet Sans, Quillet Serif and Quillet Mono)
+Copyright 2024 The Geist Project Authors (https://github.com/vercel/geist-font.git)
+Copyright 2026 Manaflow (the modifications that make Quillet Sans, Quillet Serif, Quillet Mono and Quillet UI)
 
-Quillet Sans, Quillet Serif and Quillet Mono are Modified Versions of Hanken Grotesk, Newsreader
-and JetBrains Mono respectively, renamed, with Manaflow's modifications. None of the original fonts
-declares a Reserved Font Name.
+Quillet Sans, Quillet Serif, Quillet Mono and Quillet UI are Modified Versions of Hanken Grotesk,
+Newsreader, JetBrains Mono and Geist respectively, renamed, with Manaflow's modifications. None of
+the original fonts declares a Reserved Font Name.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
