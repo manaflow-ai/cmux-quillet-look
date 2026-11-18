@@ -1,0 +1,21 @@
+// Quillet UI: the Quillet type with Quillet UI for the interface and the composer, a larger-eyed,
+// slightly darker sans cut for 13-15 px. Type only: your colors stay.
+{
+  "name": "Quillet UI",
+  "description": "Quillet UI for the chat interface, Quillet Serif for replies, Quillet Mono for code.",
+
+  "agentPane.display.font.uiFamily": "Quillet UI",
+  "agentPane.display.font.proseFamily": "Quillet Serif",
+  "agentPane.display.code.family": "Quillet Mono",
+  "agentPane.display.font.faces": {
+    "Quillet UI": "file:../fonts/quillet-ui.woff2",
+    "Quillet UI:italic": "file:../fonts/quillet-ui-italic.woff2",
+    "Quillet Serif": "file:../fonts/quillet-serif.woff2",
+    "Quillet Serif:italic": "file:../fonts/quillet-serif-italic.woff2",
+    "Quillet Mono": "file:../fonts/quillet-mono.woff2",
+    "Quillet Mono:italic": "file:../fonts/quillet-mono-italic.woff2"
+  },
+
+  "agentPane.display.font.size": 15,
+  "agentPane.display.font.lineHeight": 1.6
+}
