@@ -1,0 +1,23 @@
+// Quillet: cmux's own type family for the agent chat. Quillet Sans for the interface and the
+// composer, Quillet Serif for replies, Quillet Mono for code. Type only: your colors stay.
+// The three share one line box, tuned for 15 px prose at a 1.6 line height and code at the
+// default 0.875 scale.
+{
+  "name": "Quillet",
+  "description": "Quillet Sans for the chat, Quillet Serif for replies, Quillet Mono for code.",
+
+  "agentPane.display.font.uiFamily": "Quillet Sans",
+  "agentPane.display.font.proseFamily": "Quillet Serif",
+  "agentPane.display.code.family": "Quillet Mono",
+  "agentPane.display.font.faces": {
+    "Quillet Sans": "file:../fonts/quillet-sans.woff2",
+    "Quillet Sans:italic": "file:../fonts/quillet-sans-italic.woff2",
+    "Quillet Serif": "file:../fonts/quillet-serif.woff2",
+    "Quillet Serif:italic": "file:../fonts/quillet-serif-italic.woff2",
+    "Quillet Mono": "file:../fonts/quillet-mono.woff2",
+    "Quillet Mono:italic": "file:../fonts/quillet-mono-italic.woff2"
+  },
+
+  "agentPane.display.font.size": 15,
+  "agentPane.display.font.lineHeight": 1.6
+}

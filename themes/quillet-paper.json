@@ -1,0 +1,31 @@
+// Quillet Paper: Quillet's type on a cream page with a beige sidebar and a clay accent, no borders.
+{
+  "name": "Quillet Paper",
+  "description": "Quillet's type on warm paper: a cream page, a beige sidebar, a clay accent.",
+
+  "appearance.theme": "Claude Light",
+  "colors": { "background": "#faf9f5", "foreground": "#141413", "selection": "#f0eee6", "accent": "#d97757" },
+  "appearance.accent": "theme",
+  "appearance.background": "none",
+  "appearance.borders": "none",
+  "appearance.sidebarSurface": "separate",
+  "appearance.surfaces.sidebar.color": "#f0eee6",
+  "appearance.surfaces.sidebar.opacity": 1,
+  "appearance.surfaces.agentPane.color": "#faf9f5",
+  "appearance.surfaces.agentPane.opacity": 1,
+  "sidebar.sectionLook": "quiet",
+
+  "agentPane.display.font.uiFamily": "Quillet Sans",
+  "agentPane.display.font.proseFamily": "Quillet Serif",
+  "agentPane.display.code.family": "Quillet Mono",
+  "agentPane.display.font.faces": {
+    "Quillet Sans": "file:../fonts/quillet-sans.woff2",
+    "Quillet Sans:italic": "file:../fonts/quillet-sans-italic.woff2",
+    "Quillet Serif": "file:../fonts/quillet-serif.woff2",
+    "Quillet Serif:italic": "file:../fonts/quillet-serif-italic.woff2",
+    "Quillet Mono": "file:../fonts/quillet-mono.woff2",
+    "Quillet Mono:italic": "file:../fonts/quillet-mono-italic.woff2"
+  },
+  "agentPane.display.font.size": 15,
+  "agentPane.display.font.lineHeight": 1.6
+}

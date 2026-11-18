@@ -1,0 +1,6 @@
+build/out/
+*.ttf
+!sources/*.ttf
+__pycache__/
+*.pyc
+.DS_Store
