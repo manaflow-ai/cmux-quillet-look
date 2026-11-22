@@ -7,6 +7,8 @@
     "Newsreader[opsz,wght].ttf": {"dir": "newsreader", "sha256": "8a08d13f8a6c0d51be379a60af84f945f65369a67e509ee3c3bdcc421254d7c1", "bytes": 451664},
     "Newsreader-Italic[opsz,wght].ttf": {"dir": "newsreader", "sha256": "796668611f80b64d5adf182fde3b6f29ed83b4e7cbec7b96937e84ac01364792", "bytes": 495684},
     "JetBrainsMono[wght].ttf": {"dir": "jetbrainsmono", "sha256": "48715a42ec242c21e9f02692891e147d022299a52e48d5e413e1a942193ffeda", "bytes": 187208},
-    "JetBrainsMono-Italic[wght].ttf": {"dir": "jetbrainsmono", "sha256": "85ae2a5cd3f56baf1ce1c21a851322c58e3d8fbe8e8ad4a4d090a820dd7fe558", "bytes": 191556}
+    "JetBrainsMono-Italic[wght].ttf": {"dir": "jetbrainsmono", "sha256": "85ae2a5cd3f56baf1ce1c21a851322c58e3d8fbe8e8ad4a4d090a820dd7fe558", "bytes": 191556},
+    "Geist[wght].ttf": {"dir": "geist", "sha256": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659", "bytes": 169056},
+    "Geist-Italic[wght].ttf": {"dir": "geist", "sha256": "a464348abe41a6392f18d04c0ac2ad3c26619357ff5fdd76aff3059116f45e62", "bytes": 174584}
   }
 }

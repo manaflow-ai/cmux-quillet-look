@@ -6,6 +6,6 @@
   "version": "1.0.0",
   "license": "MIT",
   "repository": "https://github.com/manaflow-ai/cmux-quillet-look",
-  "themes": ["themes/quillet.json", "themes/quillet-paper.json"],
+  "themes": ["themes/quillet.json", "themes/quillet-paper.json", "themes/quillet-ui.json"],
   "fontLicense": "OFL-1.1"
 }

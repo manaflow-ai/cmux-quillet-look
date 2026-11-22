@@ -2,7 +2,7 @@
 
 [![Get it on cmux](https://cmux.com/extensions/badge.svg)](https://cmux.com/extensions/manaflow-ai/cmux-quillet-look)
 
-cmux's own type family for the agent chat. Three faces that share one line box, set for 15 px
+cmux's own type family for the agent chat. Four faces that share one line box, set for 15 px
 prose at a 1.6 line height and code at the default 0.875 scale:
 
 | Face | Where it shows | Built from |
@@ -10,12 +10,15 @@ prose at a 1.6 line height and code at the default 0.875 scale:
 | **Quillet Sans** | the chat interface and the composer | Hanken Grotesk |
 | **Quillet Serif** | replies | Newsreader |
 | **Quillet Mono** | code | JetBrains Mono |
+| **Quillet UI** | the chat interface and the composer, in the `quillet-ui` look | Geist |
 
 Each face is a variable-weight upright and italic, under the SIL Open Font License 1.1
 ([`fonts/OFL.txt`](fonts/OFL.txt)). The theme files name only the Quillet families.
 
-Two looks: `quillet` sets only type and keeps your colors; `quillet-paper` adds a cream page, a beige
-sidebar and a clay accent.
+Three looks: `quillet` sets only type and keeps your colors; `quillet-paper` adds a cream page, a beige
+sidebar and a clay accent; `quillet-ui` is `quillet` with Quillet UI in place of Quillet Sans: a
+larger x-height (540), wider lowercase and a slightly darker regular, for 13-15 px interface text
+([docs/design-ui.md](docs/design-ui.md)).
 
 ## Install
 
@@ -26,7 +29,8 @@ cmux theme install github.com/manaflow-ai/cmux-quillet-look
 cmux theme remove manaflow-ai/quillet
 ```
 
-To use the paper look, set `"appearance.themeFile": "quillet-paper"` in your settings.
+To use the paper look, set `"appearance.themeFile": "quillet-paper"` in your settings; for Quillet UI,
+`"quillet-ui"`.
 
 As a setup, which also sets the chat's font settings:
 
@@ -44,7 +48,8 @@ theme file's faces there. Removing it deletes that folder, and whatever was set 
 | `cmux-setup.json` | The setup: picks the `quillet` theme file and sets the chat's families, size and line height |
 | `themes/quillet.json` | Type only: the three families, the six faces, size and line height |
 | `themes/quillet-paper.json` | The same type on warm paper colors |
-| `fonts/` | The six `.woff2` faces and `OFL.txt` |
+| `themes/quillet-ui.json` | Type only, with Quillet UI for the interface |
+| `fonts/` | The eight `.woff2` faces (cmux takes at most eight) and `OFL.txt` |
 | `sources/` | The upstream fonts they are built from, pinned by sha256 in `SOURCES.json` |
 | `build/` | The scripts that build `fonts/` from `sources/` |
 
@@ -54,7 +59,7 @@ theme file's faces there. Removing it deletes that folder, and whatever was set 
 pip install -r build/requirements.txt && python3 build/build.py
 ```
 
-`build/build.py` runs `sans.py`, `serif.py` and `mono.py` in turn, each writing its upright and
+`build/build.py` runs `sans.py`, `serif.py`, `mono.py` and `ui.py` in turn, each writing its upright and
 italic `.woff2` into `fonts/` and a report into `build/out/`, then prints a size table.
 
 ## Design changes
