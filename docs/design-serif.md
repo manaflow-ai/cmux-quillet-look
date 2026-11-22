@@ -20,8 +20,8 @@ line box and the other two faces use). At 15 px one unit is 0.015 px. Every numb
 | average lowercase advance, italic | 499 | 504 |
 | line box (hhea, OS/2 typo) | 735 / -265 | 960 / -240, gap 0 |
 | default figure "1" | tabular, 600 | proportional, 421 |
-| woff2, upright | 61,312 B | 59,632 B |
-| woff2, italic | 68,072 B | 65,116 B |
+| woff2, upright | 61,312 B | 63,396 B |
+| woff2, italic | 68,072 B | 69,504 B |
 
 ## Optical size: pinned at 12
 
@@ -112,6 +112,31 @@ At 15 px on a 1x screen the radius is at most 0.18 px: the change there is a sof
 not a visible curve. On a 2x screen (0.36 device px) and at larger sizes the serif tips read
 blunt and slightly rounded, the warm feel the face is for.
 
+## Weight: +60 (CSS 400 draws Newsreader 460)
+
+Leo, 2026-11-22: "anyways i think quillet is just maybe a bit too thin". At 400 the reply serif drew
+n's stem at 0.086 em, 1.29 px at 15 px. The Claude desktop app's reply serif at its 400 draws 0.0985
+em: 1.48 px at 15 px, 1.58 px at 16 px. Stem is n at mid x-height, on the outline.
+
+| Quillet Serif, CSS 400 | draws Newsreader | stem, em | at 15 px | at 17 px |
+| --- | ---: | ---: | ---: | ---: |
+| before | 400 | 0.086 | 1.29 px | 1.46 px |
+| +30 | 430 | 0.093 | 1.40 px | 1.58 px |
+| **+60 (built)** | **460** | **0.101** | **1.52 px** | **1.72 px** |
+| +100 | 500 | 0.110 | 1.65 px | 1.87 px |
+
++60 sits between the reference serif's stem at 15 px and at 16 px, so 15 px replies read with the
+same gray as the Claude app's. +30 stays thin next to the sans, which is +50 since 1.0.2 (see
+design-sans.md 2b); +100 reads as a medium. Heavier is checked in light and dark, in the replies, the
+user bubble and the sidebar rows, in the PR's specimen.
+
+How: `common.shift_weight(font, WEIGHT)` (the sans' function), run right after the Latin subset so the
+x-height, corners and tracking work on the 460 outlines. fontTools' instancer moves the axis default
+to Newsreader 460 and cuts the range to [260, 800], then the axis is relabelled 60 lower, [200, 740],
+default 400. CSS 400 draws Newsreader 460, 600 (bold) draws 660; CSS weights above 740 clamp to it,
+which is Newsreader's own 800. `WEIGHT = 60` sits in `build/serif.py`; `--weight N --work DIR` builds
+a variant, and `--weight 0` builds the files this change replaced.
+
 ## Size
 
 "Before" is the untouched source pinned at the same opsz, cut to the same Latin subset without
@@ -119,17 +144,17 @@ hinting, as woff2, made by the same fontTools in the same run; "after" is the sh
 
 | | before | after |
 | --- | --- | --- |
-| upright | 61,312 B | 59,632 B |
-| italic | 68,072 B | 65,116 B |
+| upright | 61,312 B | 63,396 B |
+| italic | 68,072 B | 69,504 B |
 | both axes, Latin (for reference) | 137,456 B / 153,908 B | |
 
-Both are under 80 KB. The 2000 to 1000 em scale saves more than the corners add (two points per
-rounded corner).
+Both are under 80 KB. The weight shift (+60) adds about 4 KB a file: the masters are solved again
+around the 460 outline.
 
 ## Checks (in serif.json under verify)
 
-- Each woff2 reopens with fontTools; one axis left (wght 200 to 800), 279 glyphs.
-- `instancer` cuts each at wght 200, 400 and 800 and every glyph draws (decomposed) with no error:
+- Each woff2 reopens with fontTools; one axis left (wght 200 to 740, see Weight), 279 glyphs.
+- `instancer` cuts each at wght 200, 400 and 740 and every glyph draws (decomposed) with no error:
   the re-solved deltas still interpolate.
 - Point counts (contours unchanged):
 
@@ -142,6 +167,6 @@ rounded corner).
 
 ## What does not change
 
-Newsreader's drawings, weights, kerning and features stay as they are. The build moves points
+Newsreader's drawings, kerning and features stay as they are; its weights move 60 units (Weight). The build moves points
 (x-height), adds them (corners), moves advances (tracking) and repoints the figures; it draws no
 new letter.
