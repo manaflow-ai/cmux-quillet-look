@@ -40,7 +40,7 @@ DESCRIPTION = (
 # --- The design numbers (docs/design-sans.md says why) ---------------------------------------------------
 
 X_HEIGHT = 512  # units of 1000; Hanken measures 493 (x/cap 0.707), its ascenders stop at the cap height (697)
-TRACKING = 10  # units added to every advance, 5 each side: +0.15 px at 15 px, +0.13 px at 13 px
+TRACKING = 5  # units added to every advance, 2 left and 3 right: +0.075 px at 15 px, +0.065 px at 13 px
 SOFTEN = {"fraction": 0.22, "cap": 18}  # radius = 22 % of the shorter edge at that master, at most 18 units
 # Hanken's own forms made the default, in order (each step sees the cmap the previous one left):
 # ss01 is the single-storey g (the upright's default g is the two-storey one; the italic's g is single-storey

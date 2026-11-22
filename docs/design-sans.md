@@ -45,16 +45,31 @@ Mixed line: the serif targets about 0.50 em at 15 px (7.5 px) and the mono 0.55 
 (0.48 em of the line, 7.2 px). The sans sits a little over the serif (7.7 px), which is where an interface
 face should be next to its reading face; the cap height stays 697.
 
-## 2. Spacing: +10 units of tracking
+## 2. Spacing: +5 units of tracking
 
-Every advance grows by 10 units, 5 on each side (`common.track`; marks and the kerning stay as they are).
-That is 0.15 px at 15 px and 0.13 px at 13 px: the average lowercase advance goes from 503.7 to 516.5
-(italic 508.3 to 518.3); 10 of that is the tracking, the rest the single-storey g, which is wider (588
-against 514).
+Every advance grows by 5 units, 2 on the left and 3 on the right (`common.track`; marks and the kerning stay
+as they are). That is 0.075 px at 15 px and 0.065 px at 13 px.
 Why: a taller x-height makes each letter's counters and the white between letters relatively smaller, and
-Hanken's spacing is set for display sizes as much as text; at 13-15 px, on 1x and 2x screens, the extra room
-keeps rn from reading as m and stops bold UI labels from clotting. It is small enough to keep the face as
-dense as an interface face should be. More (20 units) was not tried in this round.
+Hanken's spacing is set for display sizes as much as text; at 13-15 px, on 1x and 2x screens, a little extra
+room keeps rn from reading as m and stops bold UI labels from clotting.
+
+How much: the white between letters, measured against the letters it sits between, matches the Claude
+desktop app's chat sans at its 16 px. The number is the inter-letter gap (one letter's ink right edge to the
+next one's ink left edge, kerning applied) averaged over a 289-character chat paragraph, over the average
+ink width of those letters:
+
+| Face, at its chat size | gap / letter ink | gap / x-height | gap, em | gap, px |
+| --- | ---: | ---: | ---: | ---: |
+| Claude app sans, 16 px | 0.266 | 0.201 | 0.109 | 1.74 |
+| Quillet Sans +10 (1.0.0), 15 px | 0.279 | 0.210 | 0.108 | 1.61 |
+| **Quillet Sans +5, 15 px** | **0.266** | **0.200** | **0.103** | **1.54** |
+| Hanken Grotesk +0, 15 px | 0.253 | 0.191 | 0.098 | 1.46 |
+
+At +10 the gaps were 5 % wider than the letters called for (Leo, 2026-11-22: "like the gaps between latters
+maybe"); +5 brings them level. The absolute gap is smaller than the reference's because the letters are:
+Quillet's x-height is 0.512 em at 15 px, the reference's 0.540 em at 16 px. The kerning is applied in cmux
+(no `font-kerning` or `text-rendering` override in the chat), and is lighter than the reference's (-0.0015
+against -0.0029 em per character), too small to show.
 
 ## 3. Default forms
 
