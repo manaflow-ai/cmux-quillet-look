@@ -4,6 +4,8 @@ Font Name). It sets agent prose at 15 px with a 1.6 line height. What changes, a
 
     python3 build/serif.py --out fonts
 
+Every CSS weight draws Newsreader WEIGHT units heavier (common.shift_weight).
+
 Writes OUT/quillet-serif.woff2 and OUT/quillet-serif-italic.woff2 (variable wght, Latin) and
 build/out/serif.json (before/after metrics and sizes, the change list, the checks).
 """
@@ -34,6 +36,7 @@ DESCRIPTION = (
 # Newsreader's 2000-unit em to 1000 first, the em the shared line box and the other two faces use. --------
 OPSZ = 12  # optical size pinned for 15 px screen text: sturdier hairlines and serifs, looser fit than opsz 15
 UPM = 1000
+WEIGHT = 60  # units of wght added to every CSS weight: 400 draws Newsreader's 460, 500 its 560 (common.shift_weight)
 X_HEIGHT = 500  # 0.50 em, from 469 (upright) and 479 (italic) at opsz 12
 TRACK = {"upright": 6, "italic": 5}  # units added to every advance, half each side
 # Corners: round the sharp convex straight-to-straight corners (serif tips, stem feet, square stroke ends)
@@ -132,6 +135,9 @@ def build_face(key: str, out: Path, work: Path) -> dict:
     changes.append(f"em scaled {source['head'].unitsPerEm} -> {UPM} units (fontTools scale_upem: outlines, deltas, metrics, GPOS)")
     common.subset(font)  # first: every later pass then touches only the Latin glyphs and what GSUB reaches
     changes.append("Latin subset (the chat faces' Latin range), hinting dropped")
+    # Weight next: every CSS weight draws Newsreader's outline WEIGHT units heavier; later edits work on those outlines.
+    weight = common.shift_weight(font, WEIGHT)
+    changes.append(f"weight +{WEIGHT}: CSS 400 draws Newsreader's {400 + WEIGHT}, axis {weight.get('axis_after')}")
     before = metrics(font)
     before_points = points(font)
     before_figures = figure_forms(font)
@@ -179,15 +185,21 @@ def build_face(key: str, out: Path, work: Path) -> dict:
 
 
 def main() -> int:
+    global WEIGHT
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--weight", type=int, help=f"try another WEIGHT (default {WEIGHT}); for variant builds")
+    parser.add_argument("--work", type=Path, help="where the TTFs and serif.json go (default build/out)")
     args = parser.parse_args()
+    if args.weight is not None:
+        WEIGHT = args.weight
     args.out.mkdir(parents=True, exist_ok=True)
-    work = common.ROOT / "build" / "out" / "serif"
-    report = {"family": FAMILY, "opsz": OPSZ, "upm": UPM, "x_height": X_HEIGHT, "track": TRACK, "soften": SOFTEN, "faces": {}}
+    work_root = args.work.resolve() if args.work else common.ROOT / "build" / "out"
+    work = work_root / "serif"
+    report = {"family": FAMILY, "opsz": OPSZ, "upm": UPM, "weight": WEIGHT, "x_height": X_HEIGHT, "track": TRACK, "soften": SOFTEN, "faces": {}}
     for key in FACES:
         report["faces"][key] = build_face(key, args.out, work)
-    path = common.ROOT / "build" / "out" / "serif.json"
+    path = work_root / "serif.json"
     path.write_text(json.dumps(report, indent=1, default=str) + "\n")
     ok = all(f["verify"]["ok"] for f in report["faces"].values())
     for key, f in report["faces"].items():
