@@ -9,6 +9,7 @@ down with its reason in docs/design-sans.md:
 - default forms (DEFAULT_FEATURES): Hanken's own single-storey g and round dots drawn without a feature, the
   plain forms kept behind the same features;
 - softer corners (SOFTEN): the sharp stroke ends and stem feet of letters and figures get a small round;
+- weight (WEIGHT): every CSS weight draws Hanken's outline a little heavier, for the same gray as the Claude app's sans;
 - tracking (TRACKING): a little more room between letters at 13-15 px;
 - the shared Quillet line box (common.set_line_metrics) and the name.
 
@@ -40,6 +41,7 @@ DESCRIPTION = (
 # --- The design numbers (docs/design-sans.md says why) ---------------------------------------------------
 
 X_HEIGHT = 512  # units of 1000; Hanken measures 493 (x/cap 0.707), its ascenders stop at the cap height (697)
+WEIGHT = 50  # units of wght added to every CSS weight: 400 draws Hanken's 450, 500 its 550 (common.shift_weight)
 TRACKING = 5  # units added to every advance, 2 left and 3 right: +0.075 px at 15 px, +0.065 px at 13 px
 SOFTEN = {"fraction": 0.22, "cap": 18}  # radius = 22 % of the shorter edge at that master, at most 18 units
 # Hanken's own forms made the default, in order (each step sees the cmap the previous one left):
@@ -68,6 +70,9 @@ def build(source_name: str, style: str, stem: str, out: Path, work: Path) -> dic
 
     # 1. Latin subset first, so every later edit touches only shipped glyphs. All layout features are kept.
     common.subset(font)
+
+    # 1b. Weight: every CSS weight draws Hanken's outline WEIGHT units heavier; later edits work on those outlines.
+    changes.append({"change": "weight", **common.shift_weight(font, WEIGHT)})
 
     # 2. x-height (italic: points move along the slant, common.set_x_height).
     xh = common.set_x_height(font, X_HEIGHT)
@@ -145,19 +150,25 @@ def soften_targets(font: TTFont) -> set[str]:
 
 
 def main() -> int:
+    global WEIGHT
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--weight", type=int, help=f"try another WEIGHT (default {WEIGHT}); for variant builds")
+    parser.add_argument("--work", type=Path, help="where the TTFs and sans.json go (default build/out)")
     args = parser.parse_args()
+    if args.weight is not None:
+        WEIGHT = args.weight
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
-    work = common.ROOT / "build" / "out" / "sans"
+    work_root = args.work.resolve() if args.work else common.ROOT / "build" / "out"
+    work = work_root / "sans"
     faces = [build(name, style, stem, out, work) for name, style, stem in FACES]
     report = {
         "family": FAMILY,
-        "numbers": {"x_height": X_HEIGHT, "tracking": TRACKING, "soften": SOFTEN, "default_features": DEFAULT_FEATURES, "sharp": sorted(SHARP)},
+        "numbers": {"weight": WEIGHT, "x_height": X_HEIGHT, "tracking": TRACKING, "soften": SOFTEN, "default_features": DEFAULT_FEATURES, "sharp": sorted(SHARP)},
         "faces": faces,
     }
-    path = common.ROOT / "build" / "out" / "sans.json"
+    path = work_root / "sans.json"
     path.write_text(json.dumps(report, indent=1, default=str) + "\n")
     for face in faces:
         print(f"{face['file']}: {face['woff2_before']} -> {face['woff2_after']} bytes")

@@ -322,6 +322,41 @@ def soften_corners(
     return total
 
 
+# --- Weight ---------------------------------------------------------------------------------------------
+
+
+def shift_weight(font: TTFont, units: float) -> dict:
+    """Makes every CSS weight draw the source's outline `units` heavier: wght W in the built file is the
+    source's W + units. The default outline (the glyf table) becomes the source's 400 + units, so a renderer
+    that ignores the axis gets it too; the masters are solved again by fontTools' instancer.
+
+    How: varLib.instancer moves the axis default to 400 + units and cuts the range to [min + units, max],
+    then the axis is relabelled `units` lower ([min, max - units], default 400). A uniform relabel keeps every
+    normalized coordinate, so the outlines at each user weight are exactly the source's at weight + units.
+    CSS weights above max - units clamp to it, which is the source's own max. Named instances and STAT keep
+    their user values (Regular is still 400), clamped to the new range."""
+    import copy
+
+    from fontTools.varLib import instancer
+
+    if not units:
+        return {"units": 0}
+    axis = next(a for a in font["fvar"].axes if a.axisTag == "wght")
+    lo, default, hi = axis.minValue, axis.defaultValue, axis.maxValue
+    instances = copy.deepcopy(font["fvar"].instances)
+    stat = copy.deepcopy(font["STAT"]) if "STAT" in font else None
+    instancer.instantiateVariableFont(font, {"wght": (lo + units, default + units, hi)}, inplace=True)
+    axis = next(a for a in font["fvar"].axes if a.axisTag == "wght")
+    axis.minValue, axis.defaultValue, axis.maxValue = lo, default, hi - units
+    for instance in instances:
+        instance.coordinates["wght"] = max(lo, min(hi - units, instance.coordinates["wght"]))
+    font["fvar"].instances = instances
+    if stat is not None:
+        font["STAT"] = stat
+    return {"units": units, "axis_before": [lo, default, hi], "axis_after": [lo, default, hi - units],
+            "default_outline_is_source_wght": default + units}
+
+
 # --- Spacing -------------------------------------------------------------------------------------------
 
 
