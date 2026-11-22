@@ -4,7 +4,8 @@ Quillet Sans is the sans of Quillet: the chat interface (13-14 px), the composer
 messages (15 px). It is built by `build/sans.py` from Hanken Grotesk (SIL OFL 1.1, no Reserved Font
 Name), as a renamed modified version: the original copyright stays in name ID 0 and the license ships as
 `fonts/OFL.txt`. Every change below is our own code run on Hanken's OFL outlines at every weight master
-(`common.edit_glyph` solves the gvar deltas again), so the weight axis (100-900) works as before. No
+(`common.edit_glyph` solves the gvar deltas again), so the weight axis works as before; it runs 100-850, each
+weight drawing Hanken's outline 50 units heavier (section 2b). No
 outline is traced or copied from any other face. The numbers come from `build/out/sans.json`.
 
 Units are 1000 to the em; at 15 px one unit is 0.015 px, at 13 px 0.013 px.
@@ -71,6 +72,42 @@ Quillet's x-height is 0.512 em at 15 px, the reference's 0.540 em at 16 px. The 
 (no `font-kerning` or `text-rendering` override in the chat), and is lighter than the reference's (-0.0015
 against -0.0029 em per character), too small to show.
 
+## 2b. Weight: every CSS weight draws Hanken's outline 50 units heavier
+
+Leo, 2026-11-22: "anyways i think quillet is just maybe a bit too thin". Measured, it was: at weight 400
+Quillet's stems are the reference's in em (0.085 against 0.086 em on n), but cmux sets the chat sans at 15 px
+where the Claude desktop app sets its sans at 16 px, and the reference's x-height is larger (0.540 against
+0.512 em), so on screen Quillet drew 7 % thinner stems and 10 % less ink per line.
+
+`common.shift_weight` moves the axis default to Hanken's 450 with fontTools' instancer and relabels the axis
+50 units lower, so CSS 400 draws Hanken 450, 500 draws 550, and the default outline (what an axis-blind
+renderer gets) is the 450 one. The x-height, corners and tracking are applied after, on those outlines. The
+range is 100-850; CSS 900 clamps to 850, which is Hanken's own 900.
+
+Stem of n at mid x-height, measured on the outline; gray is the ink of the 289-character chat paragraph
+(FreeType, unhinted grayscale) over line advance x em, which is the same at every size:
+
+| Face, weight, size | stem, em | stem, px | gray |
+| --- | ---: | ---: | ---: |
+| Claude app sans 400, 16 px (opsz 16) | 0.086 | 1.38 | 0.205 |
+| Quillet 400 before (Hanken 400), 15 px | 0.085 | 1.28 | 0.184 |
+| **Quillet 400 now (Hanken 450), 15 px** | **0.092** | **1.38** | **0.196** |
+| Claude app sans 500, 14 px (opsz 14) | 0.1045 | 1.46 | 0.215 |
+| Quillet 500 before, 14 px | 0.099 | 1.39 | 0.208 |
+| **Quillet 500 now, 14 px** | **0.106** | **1.48** | **0.220** |
+| Claude app sans 400, 14 px (opsz 14) | 0.086 | 1.20 | 0.184 |
+| Quillet 400 now, 13 px / 14 px | 0.092 | 1.20 / 1.29 | 0.196 |
+
+Tried: +25, +50, +75. +50 is the one that lands the chat text's stems on the reference's to the
+hundredth of a pixel and keeps medium labels within 2 %; +25 leaves the chat text 4 % thin, +75 makes
+medium labels 4 % and 14 px regular text 10 % heavier than the app's.
+
+What it costs: heavier letters on the same advances leave a little less white between them, gap / letter ink
+0.266 -> 0.255 (section 2); tracking +9 would bring it back to 0.265 if the text reads tight. Each file grows
+about 5 KB (the instancer's intermediate deltas). Outlines at every weight are Hanken's at weight + 50 to
+within 2 units; five glyphs (Z d p q x) get a slightly different set of rounded corners, because
+soften_corners picks corners on the default outline.
+
 ## 3. Default forms
 
 - Single-storey g in the upright (ss01 made the default). Hanken's default upright g is the two-storey
@@ -96,11 +133,11 @@ default g gives the two-storey g, `ss02` the other two-storey g, `ss03` on i and
 
 The sharp convex corners where two straight segments meet (stroke ends, stem feet, the corners of E L T)
 get a round whose radius is 22 % of the shorter edge at that master, at most 18 units. Stems measured on
-the built upright (I): 20 units at wght 100, 88 at 400, 157 at 900. So the radius is about 4 units at 100,
+Hanken's upright (I): 20 units at wght 100, 88 at 400, 157 at 900 (Quillet's 400 is Hanken's 450). So the radius is about 4 units at 100,
 18 at 400 (0.27 px at 15 px, 0.54 device px on a 2x screen: a stroke end that reads softened rather than
 cut), and the cap holds it at 18 at 900, 11 % of the stem, so heavy weights do not go blobby. Only corners
 turning between 55 and 125 degrees: the sharp vertices of diagonals (turns past 125 degrees) are never
-touched, and nor are joins (concave). 308 corners in 70 glyphs in the upright, 323 in 73 in the italic.
+touched, and nor are joins (concave). 314 corners in 70 glyphs in the upright, 337 in 73 in the italic.
 
 Left sharp:
 - the diagonal letters with flat-cut vertices, A M V W v w y, where a round on the cut vertex reads as a
@@ -121,10 +158,11 @@ Latin subset (`common.LATIN`), weight axis kept, all layout features kept, hints
 
 | file | before (source cut to the same subset) | after |
 | --- | --- | --- |
-| quillet-sans.woff2 | 37,164 B | 39,300 B (38.4 KiB) |
-| quillet-sans-italic.woff2 | 38,244 B | 40,668 B (39.7 KiB) |
+| quillet-sans.woff2 | 37,164 B | 44,564 B (43.5 KiB) |
+| quillet-sans-italic.woff2 | 38,244 B | 46,548 B (45.5 KiB) |
 
-The 6 % growth is the rounded corners (three points for one at each, in every master). Both are about half
+The growth is the rounded corners (three points for one at each, in every master) and, about 5 KB of it,
+the weight shift's intermediate deltas (section 2b). Both are about half
 of the 80 KB budget.
 
 ## 7. Metrics after
@@ -134,7 +172,7 @@ of the 80 KB budget.
 | x-height | 512 | 512 |
 | cap height | 697 | 697 |
 | ascender (b) / descender (p) | 697 / -204 | 697 / -204 |
-| avg lowercase advance | 516.5 | 518.3 |
+| avg lowercase advance | 512.7 | 514.5 |
 | hhea / typo | 960 / -240 / 0 | same |
 | win ascent / descent | 960 / 257 | same |
 
@@ -143,7 +181,7 @@ of the 80 KB budget.
 Run by the build's own check on the fleet (Linux pool), on the woff2 files as shipped:
 
 - fontTools reopens both woff2 files; every gvar tuple has the glyph's point count (0 mismatches);
-- `varLib.instancer` instantiates wght 100, 400 and 900 and every glyph draws with no error; x-height is 512
+- `varLib.instancer` instantiates wght 100, 400 and 850 (the top of the shifted axis) and every glyph draws with no error; x-height is 512
   at all three;
 - I, l and 1 are three different outlines and three different glyphs;
 - the features reach the other forms from the new defaults (ss01 and ss02 for g, ss03 for i and .);

@@ -4,7 +4,7 @@
   "name": "Quillet",
   "tagline": "cmux's own type family for agent chats: a sans for the interface, a serif for replies, a mono for code.",
   "description": "Quillet Sans, Quillet Serif and Quillet Mono, three openly licensed faces that share one line box, set for 15 px prose at a 1.6 line height. It picks the Quillet theme file, which sets only type, so your colors stay. Remove it and everything you had comes back.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "repository": "https://github.com/manaflow-ai/cmux-quillet-look",
   "fontLicense": "OFL-1.1",
