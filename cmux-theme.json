@@ -3,7 +3,7 @@
   "id": "manaflow-ai/quillet",
   "name": "Quillet",
   "description": "Our own type family for the agent chat: Quillet Sans for the interface, Quillet Serif for replies, Quillet Mono for code. OFL fonts included.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "repository": "https://github.com/manaflow-ai/cmux-quillet-look",
   "themes": ["themes/quillet.json", "themes/quillet-paper.json"],
